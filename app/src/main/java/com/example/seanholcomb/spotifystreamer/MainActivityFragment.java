@@ -69,7 +69,10 @@ public class MainActivityFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //http://stackoverflow.com/questions/2091465/how-do-i-pass-data-between-activities-in-android
-                Intent intent = new Intent(getActivity(), Top10Tracks.class);
+                String artist= artistList.get(position);
+                String artistId = idList.get(position);
+                Intent intent = new Intent(getActivity(), Top10Tracks.class)
+                        .putExtra(Intent.EXTRA_TEXT, new String[]{artistId, artist});
                 startActivity(intent);
             }
         });
@@ -139,6 +142,9 @@ public class MainActivityFragment extends Fragment {
                 }else
                     urlList.add("http://www.surffcs.com/Img/no_image_thumb.gif");
             }
+            //if (artistList.size()==0){
+               // Toast.makeText(getActivity(), "No artists found, Please try another search.", Toast.LENGTH_SHORT).show();
+            //}
             mParcel = new ArtistParcel(artistList, idList, urlList);
 
 
