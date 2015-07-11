@@ -24,24 +24,24 @@ public class SpotifyAdapter extends BaseAdapter{
 
     private final Context context;
 
-    public SpotifyAdapter(Context context, List artists, List ids, List urls){
+    public SpotifyAdapter(Context context, ArtistParcel parcel){
         this.context=context;
-        mArtists = artists;
-        mIds = ids;
-        mUrls = urls;
+        mArtists = parcel.artists;
+        mIds = parcel.ids;
+        mUrls = parcel.images;
     }
 
-    //required method to extend BaseAdapter
+    @Override
     public int getCount(){
         return mArtists.size();
     }
 
-    //required method tp extend BaseAdaptor
+    @Override
     public String getItem(int position){
         return mArtists.get(position);
     }
 
-    //required method to extend BaseAdapter
+    @Override
     public long getItemId(int i){
         return i;
     }
