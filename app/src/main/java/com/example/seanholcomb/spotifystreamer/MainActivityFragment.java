@@ -30,7 +30,7 @@ public class MainActivityFragment extends Fragment {
     private List<String> artistList= new ArrayList<>();
     private List<String> idList = new ArrayList<>();
     private List<String> urlList = new ArrayList<>();
-    private ArtistParcel mParcel = new ArtistParcel(artistList, idList, urlList);;
+    private ArtistParcel mParcel;
     private EditText searchBox;
     private ArtistSearchTask task;
 
@@ -42,7 +42,18 @@ public class MainActivityFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
+        if (savedInstanceState == null || !savedInstanceState.containsKey("artists")){
+            mParcel = new ArtistParcel(artistList, idList, urlList);
+        }else{
+            mParcel=savedInstanceState.getParcelable("artists");
+        }
 
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState){
+        outState.putParcelable("artists", mParcel);
+        super.onSaveInstanceState(outState);
     }
 
 
