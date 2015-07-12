@@ -42,7 +42,7 @@ public class Top10TracksFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         if (savedInstanceState == null || !savedInstanceState.containsKey("topTracks")){
-            mParcel = new ArtistParcel(images, albumNames, trackNames);
+            mParcel = new ArtistParcel(trackNames, albumNames, images);
         }else{
             mParcel=savedInstanceState.getParcelable("topTracks");
         }
@@ -64,11 +64,12 @@ public class Top10TracksFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_top10_tracks, container, false);
 
         TopTenTask topTenTask = new TopTenTask();
-
         topTenTask.execute(mId);
 
-        ListView listView = (ListView) rootView.findViewById(R.id.toptracks);
         top = new TopTenAdapter(getActivity(), mParcel);
+
+        ListView listView = (ListView) rootView.findViewById(R.id.toptracks);
+
         listView.setAdapter(top);
 
         return rootView;
@@ -81,12 +82,13 @@ public class Top10TracksFragment extends Fragment {
         @Override
         protected Boolean doInBackground(String... search){
 
-            Map<String, Object> options = new HashMap<>();
-            options.put("country", "US");
+            //setting option for API Query
+            Map<String, Object> setting = new HashMap<>();
+            setting.put("country", "US");
 
             SpotifyApi api = new SpotifyApi();
             SpotifyService spotify = api.getService();
-            Tracks results = spotify.getArtistTopTrack(search[0], options);
+            Tracks results = spotify.getArtistTopTrack(search[0], setting);
             Boolean areResults= results.tracks.size() != 0;
             if (areResults) {
 
