@@ -81,7 +81,7 @@ public class MainActivityFragment extends Fragment {
 
 
 
-
+        //Binding edit text object and setting up listener for searching artists
         searchBox = (EditText) rootView.findViewById(R.id.search_box);
         searchBox.addTextChangedListener(new TextWatcher() {
 
@@ -123,7 +123,7 @@ public class MainActivityFragment extends Fragment {
 
         return rootView;
     }
-
+    
     public class ArtistSearchTask extends AsyncTask<String, Void, Boolean>{
 
 
