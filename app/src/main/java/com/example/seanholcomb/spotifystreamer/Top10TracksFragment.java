@@ -4,11 +4,11 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,6 +32,7 @@ public class Top10TracksFragment extends Fragment {
     private List<String> trackNames = new ArrayList<>();
     private String mArtist;
     private String mId;
+    private TopTenAdapter top;
 
 
     public Top10TracksFragment() {
@@ -63,22 +64,22 @@ public class Top10TracksFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_top10_tracks, container, false);
 
         TopTenTask topTenTask = new TopTenTask();
-        Log.e(mId, mArtist);
+
         topTenTask.execute(mId);
 
         ListView listView = (ListView) rootView.findViewById(R.id.toptracks);
-        TopTenAdapter top = new TopTenAdapter(getActivity(), mParcel);
+        top = new TopTenAdapter(getActivity(), mParcel);
         listView.setAdapter(top);
 
         return rootView;
     }
 
-    public class TopTenTask extends AsyncTask<String, Void, Void> {
+    public class TopTenTask extends AsyncTask<String, Void, Boolean> {
 
 
 
         @Override
-        protected Void doInBackground(String... search){
+        protected Boolean doInBackground(String... search){
 
             Map<String, Object> options = new HashMap<>();
             options.put("country", "US");
@@ -86,8 +87,8 @@ public class Top10TracksFragment extends Fragment {
             SpotifyApi api = new SpotifyApi();
             SpotifyService spotify = api.getService();
             Tracks results = spotify.getArtistTopTrack(search[0], options);
-            //problem still here maybe fixed already
-            if (results.tracks.size() != 0) {
+            Boolean areResults= results.tracks.size() != 0;
+            if (areResults) {
 
                 for (Track track : results.tracks) {
 
@@ -99,21 +100,22 @@ public class Top10TracksFragment extends Fragment {
                     albumNames.add(track.album.name);
                     trackNames.add(track.name);
                 }
-                    mParcel = new ArtistParcel(trackNames, albumNames, images);
+                mParcel = new ArtistParcel(trackNames, albumNames, images);
+            }
 
 
-
-            }//else{
-                //Toast.makeText(getActivity(), "Unfortunitely we have no tracks for \"" + mArtist + "\"", Toast.LENGTH_SHORT).show();
-            //}
-
-
-
-
-
-
-            return null;
+            return areResults;
         }
+
+        @Override
+        protected void onPostExecute(Boolean result){
+            if (result){
+                top.notifyDataSetChanged();
+            }else{
+                Toast.makeText(getActivity(), "Unfortunitely we have no tracks for \"" + mArtist + "\"", Toast.LENGTH_SHORT).show();
+            }
+        }
+
 
     }
 }

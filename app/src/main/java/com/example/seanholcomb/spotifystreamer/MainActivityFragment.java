@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +34,7 @@ public class MainActivityFragment extends Fragment {
     private ArtistParcel mParcel;
     private EditText searchBox;
     private ArtistSearchTask task;
+    private static SpotifyAdapter spot;
 
 
 
@@ -77,7 +79,7 @@ public class MainActivityFragment extends Fragment {
             }
         });
 
-        final SpotifyAdapter spot = new SpotifyAdapter(getActivity(), mParcel);
+
 
 
         searchBox = (EditText) rootView.findViewById(R.id.search_box);
@@ -103,6 +105,7 @@ public class MainActivityFragment extends Fragment {
                 if (searchBox.length() != 0) {
                     task = new ArtistSearchTask();
                     task.execute(searchBox.getText().toString());
+                    spot.notifyDataSetChanged();
                 } else {
                     mParcel.artists.clear();
                     mParcel.ids.clear();
@@ -115,24 +118,26 @@ public class MainActivityFragment extends Fragment {
         });
 
 
-
+        spot = new SpotifyAdapter(getActivity(), mParcel);
         listView.setAdapter(spot);
 
         return rootView;
     }
 
-    public class ArtistSearchTask extends AsyncTask<String, Void, Void>{
+    public class ArtistSearchTask extends AsyncTask<String, Void, Boolean>{
 
 
 
         @Override
-        protected Void doInBackground(String... search){
+        protected Boolean doInBackground(String... search){
             SpotifyApi api = new SpotifyApi();
             SpotifyService spotify = api.getService();
             ArtistsPager results = spotify.searchArtists(search[0]);
 
 
-
+            artistList.clear();
+            idList.clear();
+            urlList.clear();
             List<Artist> searchBlock = results.artists.items;
             for(Artist artist : searchBlock){
                 artistList.add(artist.name);
@@ -142,17 +147,19 @@ public class MainActivityFragment extends Fragment {
                 }else
                     urlList.add("http://www.surffcs.com/Img/no_image_thumb.gif");
             }
-            //if (artistList.size()==0){
-               // Toast.makeText(getActivity(), "No artists found, Please try another search.", Toast.LENGTH_SHORT).show();
-            //}
+
             mParcel = new ArtistParcel(artistList, idList, urlList);
 
+            return artistList.size() !=0;
+        }
 
-
-
-
-
-            return null;
+        @Override
+        protected void onPostExecute(Boolean result){
+            if (result){
+                spot.notifyDataSetChanged();
+            }else{
+                Toast.makeText(getActivity(), "No artists found, Please try another search.", Toast.LENGTH_SHORT).show();
+            }
         }
 
     }

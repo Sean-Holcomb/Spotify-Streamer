@@ -70,7 +70,7 @@ public class TopTenAdapter extends BaseAdapter {
 
 
 
-        holder.track.setText(getItem(position));
+        holder.track.setText(mTracks.get(position));
         holder.album.setText(mAlbums.get(position));
         Picasso.with(context).load(mUrls.get(position)).resize(300,300).centerCrop().into(holder.img);
 
