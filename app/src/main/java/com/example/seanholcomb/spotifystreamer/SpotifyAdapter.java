@@ -26,9 +26,9 @@ public class SpotifyAdapter extends BaseAdapter{
 
     public SpotifyAdapter(Context context, ArtistParcel parcel){
         this.context=context;
-        mArtists = parcel.artists;
-        mIds = parcel.ids;
-        mUrls = parcel.images;
+        mArtists = parcel.getArtists();
+        mIds = parcel.getIds();
+        mUrls = parcel.getImages();
     }
 
     @Override
@@ -67,11 +67,12 @@ public class SpotifyAdapter extends BaseAdapter{
             holder = (ViewHolder) convertView.getTag();
         }
 
-
+        String url = mUrls.get(position);
 
         holder.text.setText(getItem(position));
-        Picasso.with(context).load(mUrls.get(position)).resize(300,300).centerCrop().into(holder.img);
-
+        if(url.length() != 0) {
+            Picasso.with(context).load(url).resize(300, 300).centerCrop().into(holder.img);
+        }
         return convertView;
 
     }

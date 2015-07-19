@@ -18,9 +18,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import kaaes.spotify.webapi.android.SpotifyApi;
+import kaaes.spotify.webapi.android.SpotifyError;
 import kaaes.spotify.webapi.android.SpotifyService;
 import kaaes.spotify.webapi.android.models.Artist;
 import kaaes.spotify.webapi.android.models.ArtistsPager;
+import retrofit.RetrofitError;
 
 
 /**
@@ -107,9 +109,7 @@ public class MainActivityFragment extends Fragment {
                     task.execute(searchBox.getText().toString());
                     spot.notifyDataSetChanged();
                 } else {
-                    mParcel.artists.clear();
-                    mParcel.ids.clear();
-                    mParcel.images.clear();
+                    mParcel.wipe();
                     spot.notifyDataSetChanged();
                 }
 
@@ -130,27 +130,33 @@ public class MainActivityFragment extends Fragment {
 
         @Override
         protected Boolean doInBackground(String... search){
-            SpotifyApi api = new SpotifyApi();
-            SpotifyService spotify = api.getService();
-            ArtistsPager results = spotify.searchArtists(search[0]);
+
+            try {
+                SpotifyApi api = new SpotifyApi();
+                SpotifyService spotify = api.getService();
+                ArtistsPager results = spotify.searchArtists(search[0]);
 
 
-            artistList.clear();
-            idList.clear();
-            urlList.clear();
-            List<Artist> searchBlock = results.artists.items;
-            for(Artist artist : searchBlock){
-                artistList.add(artist.name);
-                idList.add(artist.id);
-                if (artist.images.size() != 0) {
-                    urlList.add(artist.images.get(0).url);
-                }else
-                    urlList.add("http://www.surffcs.com/Img/no_image_thumb.gif");
+                artistList.clear();
+                idList.clear();
+                urlList.clear();
+                List<Artist> searchBlock = results.artists.items;
+                for (Artist artist : searchBlock) {
+                    artistList.add(artist.name);
+                    idList.add(artist.id);
+                    if (artist.images.size() != 0) {
+                        urlList.add(artist.images.get(artist.images.size() - 1).url);
+                    } else
+                        urlList.add("http://www.surffcs.com/Img/no_image_thumb.gif");
+                }
+
+                mParcel = new ArtistParcel(artistList, idList, urlList);
+
+                return artistList.size() != 0;
+            } catch (RetrofitError e){
+                SpotifyError spotifyError = SpotifyError.fromRetrofitError(e);
             }
-
-            mParcel = new ArtistParcel(artistList, idList, urlList);
-
-            return artistList.size() !=0;
+            return null;
         }
 
         @Override

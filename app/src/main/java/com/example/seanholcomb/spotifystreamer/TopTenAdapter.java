@@ -26,9 +26,9 @@ public class TopTenAdapter extends BaseAdapter {
 
     public TopTenAdapter(Context context, ArtistParcel parcel){
         this.context=context;
-        mTracks = parcel.artists;
-        mAlbums = parcel.ids;
-        mUrls = parcel.images;
+        mTracks = parcel.getArtists();
+        mAlbums = parcel.getIds();
+        mUrls = parcel.getImages();
     }
 
     @Override
