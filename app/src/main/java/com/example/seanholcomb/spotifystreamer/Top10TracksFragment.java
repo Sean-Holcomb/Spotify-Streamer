@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -33,6 +34,7 @@ public class Top10TracksFragment extends Fragment {
     private String mArtist;
     private String mId;
     private TopTenAdapter top;
+
 
 
     public Top10TracksFragment() {
@@ -70,6 +72,21 @@ public class Top10TracksFragment extends Fragment {
 
         ListView listView = (ListView) rootView.findViewById(R.id.toptracks);
 
+        //opens top ten track view, borrowed from sunshine.
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //http://stackoverflow.com/questions/2091465/how-do-i-pass-data-between-activities-in-android
+//Sean This is where I am trying to put in the extras and activate the new Activity
+                Intent intent = new Intent(getActivity(), NowPlayingActivity.class);
+                intent.putExtra("bundle", mParcel);
+                intent.putExtra(intent.EXTRA_TEXT, mArtist);
+                intent.putExtra("position", position);
+
+                startActivity(intent);
+            }
+        });
+
         listView.setAdapter(top);
 
         return rootView;
@@ -91,7 +108,6 @@ public class Top10TracksFragment extends Fragment {
             Tracks results = spotify.getArtistTopTrack(search[0], setting);
             Boolean areResults= results.tracks.size() != 0;
             if (areResults) {
-
                 for (Track track : results.tracks) {
 
                     if (track.album.images.size() > 0) {
