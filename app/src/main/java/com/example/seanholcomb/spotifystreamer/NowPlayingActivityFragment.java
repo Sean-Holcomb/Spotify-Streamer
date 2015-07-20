@@ -84,6 +84,6 @@ public class NowPlayingActivityFragment extends Fragment {
         Log.e("Dirty", "Quad");
         album_textView.setText(albumNames.get(position));
         track_textView.setText(trackNames.get(position));
-        Picasso.with(getActivity()).load(images.get(position)).resize(300, 300).centerCrop().into(albumArt_imageView);
+        Picasso.with(getActivity()).load(images.get(position)).resize(1500, 1500).centerCrop().into(albumArt_imageView);
     }
 }

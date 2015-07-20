@@ -3,8 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.seanholcomb.spotifystreamer.NowPlayingFragment"
-    android:gravity="center_vertical"
-    android:orientation="vertical">
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:padding="16dp">
 
 
     <TextView
