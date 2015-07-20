@@ -6,8 +6,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -41,7 +43,6 @@ public class NowPlayingActivityFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (savedInstanceState == null || !savedInstanceState.containsKey("NowPlaying")){
 
-            Log.e("fuuuuuuck", "me");
 
             SpotifyApplication spotifyApplication=(SpotifyApplication) getActivity().getApplicationContext();
             mParcel = spotifyApplication.getArtistParcel();
@@ -74,14 +75,37 @@ public class NowPlayingActivityFragment extends Fragment {
         album_textView=(TextView)rootView.findViewById(R.id.album);
         track_textView=(TextView)rootView.findViewById(R.id.track);
         albumArt_imageView=(ImageView)rootView.findViewById(R.id.album_art);
+        ImageButton preButton=(ImageButton)rootView.findViewById(R.id.back_button);
+        ImageButton nextButton =(ImageButton)rootView.findViewById(R.id.next_button);
         bindView(mPosition);
+
+        preButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if (mPosition > 0) {
+                    mPosition -= 1;
+                    bindView(mPosition);
+                } else {
+                    Toast.makeText(getActivity(), "No Previous Track", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        nextButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if (mPosition < trackNames.size()-1) {
+                    mPosition += 1;
+                    bindView(mPosition);
+                } else {
+                    Toast.makeText(getActivity(), "No More Tracks", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
         return rootView;
     }
 
     public void bindView(int position){
-        Log.e("Dirty", "Triple");
         artist_textView.setText(mArtist);
-        Log.e("Dirty", "Quad");
         album_textView.setText(albumNames.get(position));
         track_textView.setText(trackNames.get(position));
         Picasso.with(getActivity()).load(images.get(position)).resize(1500, 1500).centerCrop().into(albumArt_imageView);
