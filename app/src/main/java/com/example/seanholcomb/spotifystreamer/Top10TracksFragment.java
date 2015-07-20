@@ -77,11 +77,10 @@ public class Top10TracksFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //http://stackoverflow.com/questions/2091465/how-do-i-pass-data-between-activities-in-android
-//Sean This is where I am trying to put in the extras and activate the new Activity
                 Intent intent = new Intent(getActivity(), NowPlayingActivity.class);
-                intent.putExtra("bundle", mParcel);
-                intent.putExtra(intent.EXTRA_TEXT, mArtist);
-                intent.putExtra("position", position);
+                SpotifyApplication spotifyApplication=(SpotifyApplication) getActivity().getApplicationContext();
+                spotifyApplication.setArtist(mArtist);
+                spotifyApplication.setPosition(position);
 
                 startActivity(intent);
             }
@@ -119,6 +118,8 @@ public class Top10TracksFragment extends Fragment {
                     trackNames.add(track.name);
                 }
                 mParcel = new ArtistParcel(trackNames, albumNames, images);
+                SpotifyApplication spotifyApplication=(SpotifyApplication) getActivity().getApplicationContext();
+                spotifyApplication.setArtistParcel(mParcel);
             }
 
 

@@ -1,6 +1,5 @@
 package com.example.seanholcomb.spotifystreamer;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -9,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +29,7 @@ public class NowPlayingActivityFragment extends Fragment {
     private TextView album_textView;
     private TextView track_textView;
     private ImageView albumArt_imageView;
-    private int mPosition;
+    private int mPosition=0;
 
 
     public NowPlayingActivityFragment() {
@@ -40,20 +41,21 @@ public class NowPlayingActivityFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (savedInstanceState == null || !savedInstanceState.containsKey("NowPlaying")){
 
-            mParcel = new ArtistParcel(trackNames, albumNames, images);
+            Log.e("fuuuuuuck", "me");
+
+            SpotifyApplication spotifyApplication=(SpotifyApplication) getActivity().getApplicationContext();
+            mParcel = spotifyApplication.getArtistParcel();
+            mPosition = spotifyApplication.getPosition();
+            mArtist = spotifyApplication.getArtist();
 
         }else{
             mParcel=savedInstanceState.getParcelable("NowPlaying");
         }
-//Sean here I can access the bundle
-        Bundle bundle = getActivity().getIntent().getExtras();
-        //mParcel = getActivity().getIntent().getExtras().getParcelable("bundle");
-        //trackNames = mParcel.getArtists();
-        //albumNames = mParcel.getIds();
-        //images = mParcel.getImages();
-//But this line causes the app to crash
-        mArtist = bundle.getString(Intent.EXTRA_TEXT);
-        //mPosition = getActivity().getIntent().getExtras().getInt("position");
+
+
+        trackNames = mParcel.getArtists();
+        albumNames = mParcel.getIds();
+        images = mParcel.getImages();
 
     }
 
@@ -77,9 +79,11 @@ public class NowPlayingActivityFragment extends Fragment {
     }
 
     public void bindView(int position){
-        //artist_textView.setText(mArtist);
-        //album_textView.setText(albumNames.get(position));
-        //track_textView.setText(trackNames.get(position));
-        //Picasso.with(getActivity()).load(images.get(position)).resize(300, 300).centerCrop().into(albumArt_imageView);
+        Log.e("Dirty", "Triple");
+        artist_textView.setText(mArtist);
+        Log.e("Dirty", "Quad");
+        album_textView.setText(albumNames.get(position));
+        track_textView.setText(trackNames.get(position));
+        Picasso.with(getActivity()).load(images.get(position)).resize(300, 300).centerCrop().into(albumArt_imageView);
     }
 }
