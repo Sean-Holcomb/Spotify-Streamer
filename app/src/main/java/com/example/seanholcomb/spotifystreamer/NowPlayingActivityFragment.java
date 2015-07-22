@@ -107,6 +107,7 @@ public class NowPlayingActivityFragment extends Fragment {
         preButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (mPosition > 0) {
+                    mediaPlayer.stop();
                     mPosition -= 1;
                     bindView(mPosition);
                     playMusic(mTracks.get(mPosition));
@@ -120,6 +121,7 @@ public class NowPlayingActivityFragment extends Fragment {
         nextButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (mPosition < trackNames.size() - 1) {
+                    mediaPlayer.stop();
                     mPosition += 1;
                     bindView(mPosition);
                     playMusic(mTracks.get(mPosition));
@@ -148,7 +150,7 @@ public class NowPlayingActivityFragment extends Fragment {
             mediaPlayer.prepareAsync();
             mediaPlayer.start();
         }catch(IOException except){
-            Toast.makeText(getActivity(), "Shit's fucked", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Connection Problem", Toast.LENGTH_SHORT).show();
         }
     }
 }

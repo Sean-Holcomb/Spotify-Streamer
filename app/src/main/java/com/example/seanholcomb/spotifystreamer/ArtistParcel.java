@@ -61,9 +61,6 @@ public class ArtistParcel implements Parcelable {
         artists.clear();
         ids.clear();
         images.clear();
-        mArtist=null;
-        position=0;
-        musicUrls.clear();
     }
 
     //returns artists
@@ -79,10 +76,6 @@ public class ArtistParcel implements Parcelable {
     //method to get images
     public List getImages() {
         return images;
-    }
-
-     public void setArtist(String s){
-        mArtist=s;
     }
 
     public String getArtist(){
@@ -101,9 +94,6 @@ public class ArtistParcel implements Parcelable {
         return musicUrls;
     }
 
-    public void setMusicUrls(List<String> music){
-        musicUrls=music;
-    }
 
     public final Parcelable.Creator<ArtistParcel> CREATOR = new Parcelable.Creator<ArtistParcel>() {
         @Override
