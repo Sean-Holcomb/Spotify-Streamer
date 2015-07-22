@@ -49,7 +49,7 @@ public class SpotifyApplication extends Application {
     public ArtistParcel getArtistParcel(){
         return parcel;
     }
-
+    //below here needs to be deleted
     public void setArtist(String s){
         mArtist=s;
     }

@@ -42,6 +42,7 @@ public class NowPlayingActivityFragment extends Fragment {
 
     }
 
+
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
