@@ -108,6 +108,7 @@ public class NowPlayingActivityFragment extends Fragment {
             public void onClick(View v) {
                 if (mPosition > 0) {
                     mediaPlayer.stop();
+                    mediaPlayer.reset();
                     mPosition -= 1;
                     bindView(mPosition);
                     playMusic(mTracks.get(mPosition));
@@ -122,6 +123,7 @@ public class NowPlayingActivityFragment extends Fragment {
             public void onClick(View v) {
                 if (mPosition < trackNames.size() - 1) {
                     mediaPlayer.stop();
+                    mediaPlayer.reset();
                     mPosition += 1;
                     bindView(mPosition);
                     playMusic(mTracks.get(mPosition));
