@@ -52,13 +52,14 @@ public class NowPlayingActivityFragment extends Fragment {
             SpotifyApplication spotifyApplication=(SpotifyApplication) getActivity().getApplicationContext();
             mParcel = spotifyApplication.getArtistParcel();
             mPosition = spotifyApplication.getPosition();
-            mArtist = spotifyApplication.getArtist();
-            mTracks = spotifyApplication.getMusicUrls();
+
         }else{
             mParcel=savedInstanceState.getParcelable("NowPlaying");
+            mPosition=mParcel.getPosition();
         }
 
-
+        mArtist=mParcel.getArtist();
+        mTracks=mParcel.getMusicUrls();
         trackNames = mParcel.getArtists();
         albumNames = mParcel.getIds();
         images = mParcel.getImages();
@@ -109,6 +110,7 @@ public class NowPlayingActivityFragment extends Fragment {
                     mPosition -= 1;
                     bindView(mPosition);
                     playMusic(mTracks.get(mPosition));
+                    mParcel.setPosition(mPosition);
                 } else {
                     Toast.makeText(getActivity(), "No Previous Track", Toast.LENGTH_SHORT).show();
                 }
@@ -121,6 +123,7 @@ public class NowPlayingActivityFragment extends Fragment {
                     mPosition += 1;
                     bindView(mPosition);
                     playMusic(mTracks.get(mPosition));
+                    mParcel.setPosition(mPosition);
                 } else {
                     Toast.makeText(getActivity(), "No More Tracks", Toast.LENGTH_SHORT).show();
                 }
@@ -142,7 +145,7 @@ public class NowPlayingActivityFragment extends Fragment {
 
         try {
             mediaPlayer.setDataSource(url);
-            mediaPlayer.prepare();
+            mediaPlayer.prepareAsync();
             mediaPlayer.start();
         }catch(IOException except){
             Toast.makeText(getActivity(), "Shit's fucked", Toast.LENGTH_SHORT).show();

@@ -13,15 +13,23 @@ public class ArtistParcel implements Parcelable {
     private List<String> artists;
     private List<String> ids;
     private List<String> images;
-    private String mArtist;
-    private int position;
-    private List<String> musicUrls;
+    private String mArtist=null;
+    private int position=0;
+    private List<String> musicUrls=null;
 
 
     public ArtistParcel(List<String> artists, List<String> ids, List<String> images) {
         this.artists = artists;
         this.ids = ids;
         this.images = images;
+    }
+
+    public ArtistParcel(List<String> artists, List<String> ids, List<String> images, String artist, List<String> music) {
+        this.artists = artists;
+        this.ids = ids;
+        this.images = images;
+        mArtist=artist;
+        musicUrls=music;
     }
 
     private ArtistParcel(Parcel in) {
@@ -95,49 +103,17 @@ public class ArtistParcel implements Parcelable {
 
     public void setMusicUrls(List<String> music){
         musicUrls=music;
-    }TOR = new Parcelable.Creator<ArtistParcel>() {rcel) {
+    }
+
+    public final Parcelable.Creator<ArtistParcel> CREATOR = new Parcelable.Creator<ArtistParcel>() {
+        @Override
+        public ArtistParcel createFromParcel(Parcel parcel) {
+            return new ArtistParcel(parcel);
+        }
+
+        @Override
+        public ArtistParcel[] newArray(int i) {
+            return new ArtistParcel[i];
+        }
+    };
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

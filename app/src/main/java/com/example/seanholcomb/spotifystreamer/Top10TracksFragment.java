@@ -80,7 +80,6 @@ public class Top10TracksFragment extends Fragment {
                 //http://stackoverflow.com/questions/2091465/how-do-i-pass-data-between-activities-in-android
                 Intent intent = new Intent(getActivity(), NowPlayingActivity.class);
                 SpotifyApplication spotifyApplication=(SpotifyApplication) getActivity().getApplicationContext();
-                spotifyApplication.setArtist(mArtist);
                 spotifyApplication.setPosition(position);
 
                 startActivity(intent);
@@ -123,10 +122,9 @@ public class Top10TracksFragment extends Fragment {
                         trackData.add("");
                     }
                 }
-                mParcel = new ArtistParcel(trackNames, albumNames, images);
+                mParcel = new ArtistParcel(trackNames, albumNames, images, mArtist, trackData);
                 SpotifyApplication spotifyApplication=(SpotifyApplication) getActivity().getApplicationContext();
                 spotifyApplication.setArtistParcel(mParcel);
-                spotifyApplication.setMusicUrls(trackData);
             }
 
 

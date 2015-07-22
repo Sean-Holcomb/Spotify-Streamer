@@ -50,27 +50,13 @@ public class SpotifyApplication extends Application {
         return parcel;
     }
     //below here needs to be deleted
-    public void setArtist(String s){
-        mArtist=s;
-    }
-
-    public String getArtist(){
-        return mArtist;
-    }
 
     public void setPosition(int i){
-        position = i;
+         parcel.setPosition(i);
     }
 
     public int getPosition(){
-        return position;
+        return parcel.getPosition();
     }
 
-    public List<String> getMusicUrls(){
-        return musicUrls;
-    }
-
-    public void setMusicUrls(List<String> music){
-        musicUrls=music;
-    }
 }
