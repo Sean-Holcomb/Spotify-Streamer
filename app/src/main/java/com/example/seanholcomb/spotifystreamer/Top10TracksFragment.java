@@ -31,6 +31,7 @@ public class Top10TracksFragment extends Fragment {
     private List<String> images = new ArrayList<>();
     private List<String> albumNames = new ArrayList<>();
     private List<String> trackNames = new ArrayList<>();
+    private List<String> trackData = new ArrayList<>();
     private String mArtist;
     private String mId;
     private TopTenAdapter top;
@@ -116,10 +117,16 @@ public class Top10TracksFragment extends Fragment {
                     }
                     albumNames.add(track.album.name);
                     trackNames.add(track.name);
+                    if (track.preview_url != null){
+                        trackData.add(track.preview_url);
+                    }else{
+                        trackData.add("");
+                    }
                 }
                 mParcel = new ArtistParcel(trackNames, albumNames, images);
                 SpotifyApplication spotifyApplication=(SpotifyApplication) getActivity().getApplicationContext();
                 spotifyApplication.setArtistParcel(mParcel);
+                spotifyApplication.setMusicUrls(trackData);
             }
 
 

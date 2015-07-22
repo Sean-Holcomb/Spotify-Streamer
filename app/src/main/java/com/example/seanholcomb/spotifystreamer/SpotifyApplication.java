@@ -3,6 +3,8 @@ package com.example.seanholcomb.spotifystreamer;
 import android.app.Application;
 import android.content.res.Configuration;
 
+import java.util.List;
+
 /**
  * Created by seanholcomb on 7/20/15.
  */
@@ -12,6 +14,7 @@ public class SpotifyApplication extends Application {
     private ArtistParcel parcel;
     private String mArtist;
     private int position;
+    private List<String> musicUrls;
 
     public SpotifyApplication getInstance(){
         return singleton;
@@ -61,5 +64,13 @@ public class SpotifyApplication extends Application {
 
     public int getPosition(){
         return position;
+    }
+
+    public List<String> getMusicUrls(){
+        return musicUrls;
+    }
+
+    public void setMusicUrls(List<String> music){
+        musicUrls=music;
     }
 }

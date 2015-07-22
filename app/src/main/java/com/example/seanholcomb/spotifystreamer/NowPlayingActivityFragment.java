@@ -1,8 +1,9 @@
 package com.example.seanholcomb.spotifystreamer;
 
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +34,8 @@ public class NowPlayingActivityFragment extends Fragment {
     private TextView track_textView;
     private ImageView albumArt_imageView;
     private int mPosition=0;
+    private MediaPlayer mediaPlayer;
+    private List<String> mTracks;
 
 
     public NowPlayingActivityFragment() {
@@ -48,7 +52,7 @@ public class NowPlayingActivityFragment extends Fragment {
             mParcel = spotifyApplication.getArtistParcel();
             mPosition = spotifyApplication.getPosition();
             mArtist = spotifyApplication.getArtist();
-
+            mTracks = spotifyApplication.getMusicUrls();
         }else{
             mParcel=savedInstanceState.getParcelable("NowPlaying");
         }
@@ -70,20 +74,40 @@ public class NowPlayingActivityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_now_playing, container, false);
-        Log.e("Dirty", "Double");
+
+        mediaPlayer = new MediaPlayer();
+        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+
         artist_textView=(TextView)rootView.findViewById(R.id.artist);
         album_textView=(TextView)rootView.findViewById(R.id.album);
         track_textView=(TextView)rootView.findViewById(R.id.track);
         albumArt_imageView=(ImageView)rootView.findViewById(R.id.album_art);
         ImageButton preButton=(ImageButton)rootView.findViewById(R.id.back_button);
         ImageButton nextButton =(ImageButton)rootView.findViewById(R.id.next_button);
+        ImageButton playButton = (ImageButton)rootView.findViewById(R.id.play_button);
         bindView(mPosition);
+        playMusic(mTracks.get(mPosition));
+
+        playButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if (mediaPlayer.isPlaying()) {
+                    mediaPlayer.pause();
+                    //playButton.setImageDrawable();
+
+                } else {
+                    mediaPlayer.start();
+
+
+                }
+            }
+        });
 
         preButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (mPosition > 0) {
                     mPosition -= 1;
                     bindView(mPosition);
+                    playMusic(mTracks.get(mPosition));
                 } else {
                     Toast.makeText(getActivity(), "No Previous Track", Toast.LENGTH_SHORT).show();
                 }
@@ -92,9 +116,10 @@ public class NowPlayingActivityFragment extends Fragment {
 
         nextButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                if (mPosition < trackNames.size()-1) {
+                if (mPosition < trackNames.size() - 1) {
                     mPosition += 1;
                     bindView(mPosition);
+                    playMusic(mTracks.get(mPosition));
                 } else {
                     Toast.makeText(getActivity(), "No More Tracks", Toast.LENGTH_SHORT).show();
                 }
@@ -109,5 +134,17 @@ public class NowPlayingActivityFragment extends Fragment {
         album_textView.setText(albumNames.get(position));
         track_textView.setText(trackNames.get(position));
         Picasso.with(getActivity()).load(images.get(position)).resize(1500, 1500).centerCrop().into(albumArt_imageView);
+    }
+
+    public void playMusic(String url) {
+
+
+        try {
+            mediaPlayer.setDataSource(url);
+            mediaPlayer.prepare();
+            mediaPlayer.start();
+        }catch(IOException except){
+            Toast.makeText(getActivity(), "Shit's fucked", Toast.LENGTH_SHORT).show();
+        }
     }
 }
