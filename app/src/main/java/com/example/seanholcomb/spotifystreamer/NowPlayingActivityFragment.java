@@ -102,6 +102,7 @@ public class NowPlayingActivityFragment extends Fragment {
         ImageButton preButton=(ImageButton)rootView.findViewById(R.id.back_button);
         ImageButton nextButton =(ImageButton)rootView.findViewById(R.id.next_button);
         playButton = (ImageButton)rootView.findViewById(R.id.play_button);
+        playButton.setClickable(false);
         bindView(mPosition);
         playMusic(mTracks.get(mPosition));
 
@@ -163,6 +164,15 @@ public class NowPlayingActivityFragment extends Fragment {
                 } else {
                     Toast.makeText(getActivity(), "No More Tracks", Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+
+        mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener(){
+            @Override
+            public void onPrepared(MediaPlayer player){
+                playButton.setClickable(true);
+                player.start();
+                playButton.setImageResource(R.drawable.ic_media_pause);
             }
         });
 
@@ -233,32 +243,8 @@ public class NowPlayingActivityFragment extends Fragment {
         bindView(mPosition);
         playMusic(mTracks.get(mPosition));
         mParcel.setPosition(mPosition);
+        playButton.setImageResource(R.drawable.ic_media_play);
     }
 
 
-/*
-    public class SpotifyService extends Service implements MediaPlayer.OnPreparedListener {
-        private static final String ACTION_PLAY = "com.example.action.PLAY";
-        MediaPlayer mediaPlayer = null;
-
-        @Override
-        public IBinder onBind(Intent intent) {
-            return null;
-        }
-
-        public int onStartCommand(Intent intent, int flags, int startId) {
-
-            if (intent.getAction().equals(ACTION_PLAY)) {
-                mediaPlayer = new MediaPlayer();
-                mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-                mediaPlayer.setOnPreparedListener(this);
-                mediaPlayer.prepareAsync(); // prepare async to not block main thread
-            }
-        }
-
-        // Called when MediaPlayer is ready
-        public void onPrepared(MediaPlayer player) {
-            player.start();
-        }
-    }*/
 }

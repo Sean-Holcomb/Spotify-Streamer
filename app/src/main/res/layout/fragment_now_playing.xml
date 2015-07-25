@@ -72,6 +72,7 @@
             android:layout_height="wrap_content"
             android:src="@android:drawable/ic_media_previous"
             android:layout_weight="1"
+
             />
 
         <ImageButton
@@ -80,6 +81,7 @@
             android:layout_height="wrap_content"
             android:src="@android:drawable/ic_media_play"
             android:layout_weight="1"
+
             />
 
         <ImageButton
@@ -88,6 +90,7 @@
             android:layout_height="wrap_content"
             android:src="@android:drawable/ic_media_next"
             android:layout_weight="1"
+
             />
 
     </LinearLayout>
