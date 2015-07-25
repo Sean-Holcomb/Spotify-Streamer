@@ -149,12 +149,7 @@ public class NowPlayingActivityFragment extends Fragment {
         preButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (mPosition > 0) {
-                    mediaPlayer.stop();
-                    mediaPlayer.reset();
-                    mPosition -= 1;
-                    bindView(mPosition);
-                    playMusic(mTracks.get(mPosition));
-                    mParcel.setPosition(mPosition);
+                    changeSong(-1);
                 } else {
                     Toast.makeText(getActivity(), "No Previous Track", Toast.LENGTH_SHORT).show();
                 }
@@ -164,12 +159,7 @@ public class NowPlayingActivityFragment extends Fragment {
         nextButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (mPosition < trackNames.size() - 1) {
-                    mediaPlayer.stop();
-                    mediaPlayer.reset();
-                    mPosition += 1;
-                    bindView(mPosition);
-                    playMusic(mTracks.get(mPosition));
-                    mParcel.setPosition(mPosition);
+                    changeSong(1);
                 } else {
                     Toast.makeText(getActivity(), "No More Tracks", Toast.LENGTH_SHORT).show();
                 }
@@ -200,9 +190,12 @@ public class NowPlayingActivityFragment extends Fragment {
     }
 
     public void syncSeekBar() {
-        int position = mediaPlayer.getCurrentPosition() / 1000;
+        final int MILISEC_CONVERT= 1000;
+        final int INT_DIV_FIX= 501;
+        int position = (mediaPlayer.getCurrentPosition()+INT_DIV_FIX) / MILISEC_CONVERT;
         seekBar.setProgress(position);
         if (position<10) {
+
             amountPlayed.setText("0:0" + String.valueOf(position));
             amountLeft.setText("-0:" + String.valueOf(30 - position));
         } else if (position>20) {
@@ -211,6 +204,15 @@ public class NowPlayingActivityFragment extends Fragment {
         } else{
             amountPlayed.setText("0:" + String.valueOf(position));
             amountLeft.setText("-0:" + String.valueOf(30 - position));
+        }
+        if (position == 30){
+            if (mPosition < trackNames.size() - 1) {
+                changeSong(1);
+            } else {
+                mPosition=0;
+                changeSong(0);
+            }
+
         }
         handler.postDelayed(runnable, 1000);
     }
@@ -221,6 +223,17 @@ public class NowPlayingActivityFragment extends Fragment {
             syncSeekBar();
         }
     };
+
+    //changes track being displayed and playing
+    //@param shifts song by i on track list.
+    public void changeSong(int i){
+        mediaPlayer.stop();
+        mediaPlayer.reset();
+        mPosition += i;
+        bindView(mPosition);
+        playMusic(mTracks.get(mPosition));
+        mParcel.setPosition(mPosition);
+    }
 
 
 /*
