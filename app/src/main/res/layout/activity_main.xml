@@ -1,6 +1,7 @@
-<fragment
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:id="@+id/fragment"
+<fragment xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/artist_search_fragment"
     android:name="com.example.seanholcomb.spotifystreamer.MainActivityFragment"
-    tools:layout="@layout/fragment_main" android:layout_width="match_parent"
-    android:layout_height="match_parent" />
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:layout="@layout/fragment_main" />

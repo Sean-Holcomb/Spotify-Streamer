@@ -1,17 +1,34 @@
 package com.example.seanholcomb.spotifystreamer;
 
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 
 public class MainActivity extends ActionBarActivity {
+    private static final String Top_Ten_TAG = "TTTTAG";
+    private boolean mIsTablet=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.e("triple", "triple");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        if (findViewById(R.id.top_ten_tracks_fragment) != null) {
+            mIsTablet=true;
+            Log.e("dirty", "triple");
+            if (savedInstanceState == null) {
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.top_ten_tracks_fragment, new Top10TracksFragment())
+                        .commit();
+                Log.e("double", "triple");
+
+            }else {
+                mIsTablet = false;
+            }
+        }
     }
 
 

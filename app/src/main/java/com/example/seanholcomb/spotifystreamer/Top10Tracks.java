@@ -12,6 +12,11 @@ public class Top10Tracks extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_top10_tracks);
+        if (savedInstanceState== null){
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.top_ten_tracks_fragment, new Top10TracksFragment())
+                    .commit();
+        }
     }
 
 

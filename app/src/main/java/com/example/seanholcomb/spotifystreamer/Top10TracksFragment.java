@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,9 +50,11 @@ public class Top10TracksFragment extends Fragment {
         }else{
             mParcel=savedInstanceState.getParcelable("topTracks");
         }
+        if (getActivity().getIntent().getExtras()!=null) {
+            mId = getActivity().getIntent().getExtras().getStringArray(Intent.EXTRA_TEXT)[0];
+            mArtist = getActivity().getIntent().getExtras().getStringArray(Intent.EXTRA_TEXT)[1];
+        }
 
-        mId = getActivity().getIntent().getExtras().getStringArray(Intent.EXTRA_TEXT)[0];
-        mArtist = getActivity().getIntent().getExtras().getStringArray(Intent.EXTRA_TEXT)[1];
 
     }
 
@@ -61,32 +64,37 @@ public class Top10TracksFragment extends Fragment {
         super.onSaveInstanceState(outState);
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_top10_tracks, container, false);
 
-        TopTenTask topTenTask = new TopTenTask();
-        topTenTask.execute(mId);
-
-        top = new TopTenAdapter(getActivity(), mParcel);
-
         ListView listView = (ListView) rootView.findViewById(R.id.toptracks);
+        Log.e("Fuuuuuck", "you");
+        TopTenTask topTenTask = new TopTenTask();
+        if (mId != null) {
+            topTenTask.execute(mId);
+            top = new TopTenAdapter(getActivity(), mParcel);
+            listView.setAdapter(top);
+        }
+        Log.e("Dirty","Double");
+
 
         //opens top ten track view, borrowed from sunshine.
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //http://stackoverflow.com/questions/2091465/how-do-i-pass-data-between-activities-in-android
                 Intent intent = new Intent(getActivity(), NowPlayingActivity.class);
-                SpotifyApplication spotifyApplication=(SpotifyApplication) getActivity().getApplicationContext();
+                SpotifyApplication spotifyApplication = (SpotifyApplication) getActivity().getApplicationContext();
                 spotifyApplication.setPosition(position);
 
                 startActivity(intent);
             }
         });
 
-        listView.setAdapter(top);
+
 
         return rootView;
     }

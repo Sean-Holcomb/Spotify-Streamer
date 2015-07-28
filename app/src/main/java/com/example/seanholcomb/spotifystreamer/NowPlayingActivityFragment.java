@@ -26,7 +26,8 @@ import java.util.List;
  * A placeholder fragment containing a simple view.
  */
 public class NowPlayingActivityFragment extends Fragment {
-
+    private final int MILISEC_CONVERT= 1000;
+    private final int INT_DIV_FIX= 999;
     private final int SONG_LENGTH=30;
     private ArtistParcel mParcel;
     private List<String> images = new ArrayList<>();
@@ -113,7 +114,7 @@ public class NowPlayingActivityFragment extends Fragment {
             @Override
             public void onProgressChanged (SeekBar seekBar, int progress, boolean fromUser){
                 if (touchLock) {
-                    mediaPlayer.seekTo(progress*1000);
+                    mediaPlayer.seekTo(progress*MILISEC_CONVERT);
                 }
                 //amountPlayed.setText("0:" + progress);
                 //amountLeft.setText("0:"+(SONG_LENGTH-progress));
@@ -200,8 +201,7 @@ public class NowPlayingActivityFragment extends Fragment {
     }
 
     public void syncSeekBar() {
-        final int MILISEC_CONVERT= 1000;
-        final int INT_DIV_FIX= 501;
+
         int position = (mediaPlayer.getCurrentPosition()+INT_DIV_FIX) / MILISEC_CONVERT;
         seekBar.setProgress(position);
         if (position<10) {
