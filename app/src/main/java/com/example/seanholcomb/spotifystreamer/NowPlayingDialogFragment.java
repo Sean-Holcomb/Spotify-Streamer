@@ -1,10 +1,11 @@
 package com.example.seanholcomb.spotifystreamer;
 
+
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.Fragment;
+import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +26,7 @@ import java.util.List;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class NowPlayingActivityFragment extends Fragment {
+public class NowPlayingDialogFragment extends DialogFragment {
     private final int MILISEC_CONVERT= 1000;
     private final int INT_DIV_FIX= 999;
     private final int SONG_LENGTH=30;
@@ -51,7 +52,7 @@ public class NowPlayingActivityFragment extends Fragment {
 
 
 
-    public NowPlayingActivityFragment() {
+    public NowPlayingDialogFragment() {
 
     }
 

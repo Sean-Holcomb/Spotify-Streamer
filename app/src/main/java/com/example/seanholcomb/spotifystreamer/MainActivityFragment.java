@@ -148,7 +148,9 @@ public class MainActivityFragment extends Fragment {
                 for (Artist artist : searchBlock) {
                     artistList.add(artist.name);
                     idList.add(artist.id);
-                    if (artist.images.size() != 0) {
+                    if(artist.images.size()>2){
+                        urlList.add(artist.images.get(artist.images.size() - 2).url);
+                    }else if (artist.images.size() != 0) {
                         urlList.add(artist.images.get(artist.images.size() - 1).url);
                     } else
                         urlList.add("http://www.surffcs.com/Img/no_image_thumb.gif");

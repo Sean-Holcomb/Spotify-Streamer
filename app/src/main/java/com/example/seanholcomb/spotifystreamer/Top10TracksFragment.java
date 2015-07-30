@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +36,8 @@ public class Top10TracksFragment extends Fragment {
     private String mArtist;
     private String mId;
     private TopTenAdapter top;
+    private boolean mIsTablet=false;
+
 
 
 
@@ -70,20 +72,19 @@ public class Top10TracksFragment extends Fragment {
     }
 
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_top10_tracks, container, false);
-
+        final FragmentManager fm = getActivity().getSupportFragmentManager();
         ListView listView = (ListView) rootView.findViewById(R.id.toptracks);
-        Log.e("Fuuuuuck", "you");
         TopTenTask topTenTask = new TopTenTask();
         if (mId != null) {
             topTenTask.execute(mId);
             top = new TopTenAdapter(getActivity(), mParcel);
             listView.setAdapter(top);
         }
-        Log.e("Dirty","Double");
 
 
         //opens top ten track view, borrowed from sunshine.
@@ -91,11 +92,17 @@ public class Top10TracksFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //http://stackoverflow.com/questions/2091465/how-do-i-pass-data-between-activities-in-android
-                Intent intent = new Intent(getActivity(), NowPlayingActivity.class);
+
                 SpotifyApplication spotifyApplication = (SpotifyApplication) getActivity().getApplicationContext();
                 spotifyApplication.setPosition(position);
-
-                startActivity(intent);
+                mIsTablet=spotifyApplication.getIsTablet();
+                if (mIsTablet){
+                    NowPlayingDialogFragment playingDialogFragment =new NowPlayingDialogFragment();
+                    playingDialogFragment.show(fm, "Now Playing");
+                }else {
+                    Intent intent = new Intent(getActivity(), NowPlayingActivity.class);
+                    startActivity(intent);
+                }
             }
         });
 

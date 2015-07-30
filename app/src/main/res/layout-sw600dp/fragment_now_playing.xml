@@ -1,7 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="400dp"
+    android:layout_height="400dp"
     tools:context="com.example.seanholcomb.spotifystreamer.NowPlayingFragment"
     android:gravity="center_horizontal"
     android:orientation="vertical"
@@ -22,8 +22,8 @@
 
     <ImageView
         android:id="@+id/album_art"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_width="200dp"
+        android:layout_height="200dp" />
 
     <TextView
         android:id="@+id/track"
@@ -36,7 +36,7 @@
 
         <SeekBar
             android:id="@+id/seekbar"
-            android:layout_width="match_parent"
+            android:layout_width="400dp"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:paddingBottom="16dp"/>
@@ -70,16 +70,17 @@
 
         <ImageButton
             android:id="@+id/back_button"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:src="@android:drawable/ic_media_previous"
             android:layout_marginRight="16dp"
+
             />
 
         <ImageButton
             android:id="@+id/play_button"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:src="@android:drawable/ic_media_play"
 
 
@@ -87,10 +88,12 @@
 
         <ImageButton
             android:id="@+id/next_button"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:src="@android:drawable/ic_media_next"
             android:layout_marginLeft="16dp"
+
+
             />
 
     </LinearLayout>

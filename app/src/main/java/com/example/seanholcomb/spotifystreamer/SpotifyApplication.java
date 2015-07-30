@@ -15,6 +15,7 @@ public class SpotifyApplication extends Application {
     private String mArtist;
     private int position;
     private List<String> musicUrls;
+    private boolean mIsTablet = false;
 
     public SpotifyApplication getInstance(){
         return singleton;
@@ -58,5 +59,14 @@ public class SpotifyApplication extends Application {
     public int getPosition(){
         return parcel.getPosition();
     }
+
+    public void setmIsTablet(){
+        mIsTablet=true;
+    }
+
+    public boolean getIsTablet(){
+        return mIsTablet;
+    }
+
 
 }
