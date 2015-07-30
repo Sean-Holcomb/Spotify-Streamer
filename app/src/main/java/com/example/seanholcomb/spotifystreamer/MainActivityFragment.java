@@ -1,6 +1,5 @@
 package com.example.seanholcomb.spotifystreamer;
 
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -37,6 +36,7 @@ public class MainActivityFragment extends Fragment {
     private EditText searchBox;
     private ArtistSearchTask task;
     private static SpotifyAdapter spot;
+    private String[] extra;
 
 
 
@@ -60,6 +60,11 @@ public class MainActivityFragment extends Fragment {
         super.onSaveInstanceState(outState);
     }
 
+    public interface Callback {
+
+        public void onItemSelected(String[] extra);
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -75,9 +80,8 @@ public class MainActivityFragment extends Fragment {
                 //http://stackoverflow.com/questions/2091465/how-do-i-pass-data-between-activities-in-android
                 String artist= artistList.get(position);
                 String artistId = idList.get(position);
-                Intent intent = new Intent(getActivity(), Top10Tracks.class)
-                        .putExtra(Intent.EXTRA_TEXT, new String[]{artistId, artist});
-                startActivity(intent);
+                extra = new String[]{artistId, artist};
+                ((Callback) getActivity()).onItemSelected(extra);
             }
         });
 

@@ -50,9 +50,14 @@ public class Top10TracksFragment extends Fragment {
         }else{
             mParcel=savedInstanceState.getParcelable("topTracks");
         }
+        Bundle arguments = getArguments();
         if (getActivity().getIntent().getExtras()!=null) {
             mId = getActivity().getIntent().getExtras().getStringArray(Intent.EXTRA_TEXT)[0];
             mArtist = getActivity().getIntent().getExtras().getStringArray(Intent.EXTRA_TEXT)[1];
+        }else if (arguments != null){
+            String[] extra = arguments.getStringArray("extra");
+            mId = extra[0];
+            mArtist = extra[1];
         }
 
 

@@ -1,5 +1,6 @@
 package com.example.seanholcomb.spotifystreamer;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -7,7 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity implements MainActivityFragment.Callback {
     private static final String Top_Ten_TAG = "TTTTAG";
     private boolean mIsTablet=false;
 
@@ -18,16 +19,32 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
         if (findViewById(R.id.top_ten_tracks_fragment) != null) {
             mIsTablet=true;
-            Log.e("dirty", "triple");
             if (savedInstanceState == null) {
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.top_ten_tracks_fragment, new Top10TracksFragment())
                         .commit();
-                Log.e("double", "triple");
 
             }else {
                 mIsTablet = false;
             }
+        }
+    }
+
+    @Override
+    public void onItemSelected(String[] extra){
+        if (mIsTablet){
+
+            Top10TracksFragment fragment = new Top10TracksFragment();
+            Bundle args = new Bundle();
+            args.putStringArray("extra", extra);
+            fragment.setArguments(args);
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.top_ten_tracks_fragment, fragment)
+                    .commit();
+        }else{
+            Intent intent = new Intent(this, Top10Tracks.class)
+                    .putExtra(Intent.EXTRA_TEXT, extra);
+            startActivity(intent);
         }
     }
 
