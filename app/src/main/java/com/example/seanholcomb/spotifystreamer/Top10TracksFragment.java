@@ -89,7 +89,8 @@ public class Top10TracksFragment extends Fragment {
 
 
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+        AdapterView.OnItemClickListener listener =new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 FragmentManager fm = getActivity().getSupportFragmentManager();
@@ -102,11 +103,14 @@ public class Top10TracksFragment extends Fragment {
                 }else {
                     FragmentTransaction transaction = fm.beginTransaction();
                     transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-                    transaction.add(android.R.id.content, playingActivityFragment)
-                            .addToBackStack(null).commit();
+                    transaction.replace(android.R.id.content, playingActivityFragment)
+                            .addToBackStack(null)
+                            .commit();
                 }
             }
-        });
+        };
+
+        listView.setOnItemClickListener(listener);
 
 
 

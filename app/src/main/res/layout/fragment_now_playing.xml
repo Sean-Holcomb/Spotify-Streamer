@@ -6,7 +6,8 @@
     android:gravity="center_horizontal"
     android:orientation="vertical"
     android:padding="16dp"
-    android:background="#FFFFFF">
+    android:background="#FFFFFF"
+    android:clickable="true">
 
 
 
