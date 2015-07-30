@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -77,7 +78,7 @@ public class Top10TracksFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_top10_tracks, container, false);
-        final FragmentManager fm = getActivity().getSupportFragmentManager();
+        FragmentManager fm = getActivity().getSupportFragmentManager();
         ListView listView = (ListView) rootView.findViewById(R.id.toptracks);
         TopTenTask topTenTask = new TopTenTask();
         if (mId != null) {
@@ -87,21 +88,22 @@ public class Top10TracksFragment extends Fragment {
         }
 
 
-        //opens top ten track view, borrowed from sunshine.
+
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //http://stackoverflow.com/questions/2091465/how-do-i-pass-data-between-activities-in-android
-
+                FragmentManager fm = getActivity().getSupportFragmentManager();
+                NowPlayingActivityFragment playingActivityFragment =new NowPlayingActivityFragment();
                 SpotifyApplication spotifyApplication = (SpotifyApplication) getActivity().getApplicationContext();
                 spotifyApplication.setPosition(position);
                 mIsTablet=spotifyApplication.getIsTablet();
                 if (mIsTablet){
-                    NowPlayingDialogFragment playingDialogFragment =new NowPlayingDialogFragment();
-                    playingDialogFragment.show(fm, "Now Playing");
+                    playingActivityFragment.show(fm, "Now Playing");
                 }else {
-                    Intent intent = new Intent(getActivity(), NowPlayingActivity.class);
-                    startActivity(intent);
+                    FragmentTransaction transaction = fm.beginTransaction();
+                    transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                    transaction.add(android.R.id.content, playingActivityFragment)
+                            .addToBackStack(null).commit();
                 }
             }
         });

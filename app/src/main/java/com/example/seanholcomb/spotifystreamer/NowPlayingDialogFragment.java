@@ -195,7 +195,7 @@ public class NowPlayingDialogFragment extends DialogFragment {
         artist_textView.setText(mArtist);
         album_textView.setText(albumNames.get(position));
         track_textView.setText(trackNames.get(position));
-        Picasso.with(getActivity()).load(images.get(position)).resize(1500, 1500).centerCrop().into(albumArt_imageView);
+        Picasso.with(getActivity()).load(images.get(position)).resize(400, 400).centerCrop().into(albumArt_imageView);
     }
 
     public void playMusic(String url) {

@@ -5,7 +5,9 @@
     tools:context="com.example.seanholcomb.spotifystreamer.NowPlayingFragment"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="#FFFFFF">
+
 
 
     <TextView
@@ -23,7 +25,9 @@
     <ImageView
         android:id="@+id/album_art"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        />
 
     <TextView
         android:id="@+id/track"
@@ -70,16 +74,18 @@
 
         <ImageButton
             android:id="@+id/back_button"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="24dp"
             android:src="@android:drawable/ic_media_previous"
             android:layout_marginRight="16dp"
             />
 
         <ImageButton
             android:id="@+id/play_button"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="24dp"
             android:src="@android:drawable/ic_media_play"
 
 
@@ -87,8 +93,9 @@
 
         <ImageButton
             android:id="@+id/next_button"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="24dp"
             android:src="@android:drawable/ic_media_next"
             android:layout_marginLeft="16dp"
             />
