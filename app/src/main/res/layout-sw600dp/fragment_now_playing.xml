@@ -1,7 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="400dp"
-    android:layout_height="400dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     tools:context="com.example.seanholcomb.spotifystreamer.NowPlayingFragment"
     android:gravity="center_horizontal"
     android:orientation="vertical"
@@ -22,8 +22,9 @@
 
     <ImageView
         android:id="@+id/album_art"
-        android:layout_width="200dp"
-        android:layout_height="200dp" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"/>
 
     <TextView
         android:id="@+id/track"
@@ -36,7 +37,7 @@
 
         <SeekBar
             android:id="@+id/seekbar"
-            android:layout_width="400dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:paddingBottom="16dp"/>
@@ -72,6 +73,7 @@
             android:id="@+id/back_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:padding="24dp"
             android:src="@android:drawable/ic_media_previous"
             android:layout_marginRight="16dp"
 
@@ -81,6 +83,7 @@
             android:id="@+id/play_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:padding="24dp"
             android:src="@android:drawable/ic_media_play"
 
 
@@ -90,6 +93,7 @@
             android:id="@+id/next_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:padding="24dp"
             android:src="@android:drawable/ic_media_next"
             android:layout_marginLeft="16dp"
 
