@@ -1,7 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="500dp"
-    android:layout_height="500dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     tools:context="com.example.seanholcomb.spotifystreamer.NowPlayingFragment"
     android:gravity="center_horizontal"
     android:orientation="vertical"
@@ -26,6 +26,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         />
+
 
     <TextView
         android:id="@+id/track"
