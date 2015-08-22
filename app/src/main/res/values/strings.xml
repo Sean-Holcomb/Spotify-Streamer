@@ -4,7 +4,11 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_top10_tracks">Spotify Streamer</string>
 
+    <string name="no_tracks_toast">Unfortunately we have no tracks for </string>
+    <string name="no_artists_toast">No artists found, Please try another search.</string>
+    <string name="no_image_url">http://www.surffcs.com/Img/no_image_thumb.gif</string>
 
+    <string name="no_connection_toast">There is no internet connection, please try again later.</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_now_playing">Spotify Streamer</string>
 </resources>

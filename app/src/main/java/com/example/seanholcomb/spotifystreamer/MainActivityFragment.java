@@ -1,5 +1,8 @@
 package com.example.seanholcomb.spotifystreamer;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -35,8 +38,9 @@ public class MainActivityFragment extends Fragment {
     private ArtistParcel mParcel;
     private EditText searchBox;
     private ArtistSearchTask task;
-    private static SpotifyAdapter spot;
+    private SpotifyAdapter spot;
     private String[] extra;
+
 
 
 
@@ -88,7 +92,9 @@ public class MainActivityFragment extends Fragment {
 
 
         //Binding edit text object and setting up listener for searching artists
+
         searchBox = (EditText) rootView.findViewById(R.id.search_box);
+
         searchBox.addTextChangedListener(new TextWatcher() {
 
             @Override
@@ -121,9 +127,9 @@ public class MainActivityFragment extends Fragment {
 
         });
 
-
         spot = new SpotifyAdapter(getActivity(), mParcel);
         listView.setAdapter(spot);
+
 
         return rootView;
     }
@@ -136,32 +142,35 @@ public class MainActivityFragment extends Fragment {
         protected Boolean doInBackground(String... search){
 
             try {
-                SpotifyApi api = new SpotifyApi();
-                SpotifyService spotify = api.getService();
-                ArtistsPager results = spotify.searchArtists(search[0]);
+                if(isNetworkAvailable()) {
+                    SpotifyApi api = new SpotifyApi();
+                    SpotifyService spotify = api.getService();
+                    ArtistsPager results = spotify.searchArtists(search[0]);
 
 
-                artistList.clear();
-                idList.clear();
-                urlList.clear();
-                List<Artist> searchBlock = results.artists.items;
-                for (Artist artist : searchBlock) {
-                    artistList.add(artist.name);
-                    idList.add(artist.id);
-                    if(artist.images.size()>2){
-                        urlList.add(artist.images.get(artist.images.size() - 2).url);
-                    }else if (artist.images.size() != 0) {
-                        urlList.add(artist.images.get(artist.images.size() - 1).url);
-                    } else
-                        urlList.add("http://www.surffcs.com/Img/no_image_thumb.gif");
+                    artistList.clear();
+                    idList.clear();
+                    urlList.clear();
+                    List<Artist> searchBlock = results.artists.items;
+                    for (Artist artist : searchBlock) {
+                        artistList.add(artist.name);
+                        idList.add(artist.id);
+                        if (artist.images.size() > 2) {
+                            urlList.add(artist.images.get(artist.images.size() - 2).url);
+                        } else if (artist.images.size() != 0) {
+                            urlList.add(artist.images.get(artist.images.size() - 1).url);
+                        } else
+                            urlList.add(getString(R.string.no_image_url));
+                    }
                 }
-
                 mParcel = new ArtistParcel(artistList, idList, urlList);
 
                 return artistList.size() != 0;
+
             } catch (RetrofitError e){
                 SpotifyError spotifyError = SpotifyError.fromRetrofitError(e);
             }
+
             return null;
         }
 
@@ -170,8 +179,15 @@ public class MainActivityFragment extends Fragment {
             if (result){
                 spot.notifyDataSetChanged();
             }else{
-                Toast.makeText(getActivity(), "No artists found, Please try another search.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), getString(R.string.no_artists_toast), Toast.LENGTH_SHORT).show();
             }
+        }
+
+        private boolean isNetworkAvailable() {
+            ConnectivityManager connectivityManager
+                    = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+            return activeNetworkInfo != null && activeNetworkInfo.isConnected();
         }
 
     }

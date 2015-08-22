@@ -2,6 +2,7 @@ package com.example.seanholcomb.spotifystreamer;
 
 import android.app.Application;
 import android.content.res.Configuration;
+import android.media.MediaPlayer;
 
 import java.util.List;
 
@@ -16,6 +17,7 @@ public class SpotifyApplication extends Application {
     private int position;
     private List<String> musicUrls;
     private boolean mIsTablet = false;
+    private MediaPlayer mediaPlayer=null;
 
     public SpotifyApplication getInstance(){
         return singleton;
@@ -66,6 +68,14 @@ public class SpotifyApplication extends Application {
 
     public boolean getIsTablet(){
         return mIsTablet;
+    }
+
+    public void setMediaPlayer(MediaPlayer m){
+        mediaPlayer=m;
+    }
+
+    public MediaPlayer getMediaPlayer(){
+        return mediaPlayer;
     }
 
 

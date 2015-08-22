@@ -1,6 +1,9 @@
 package com.example.seanholcomb.spotifystreamer;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -38,6 +41,7 @@ public class Top10TracksFragment extends Fragment {
     private String mId;
     private TopTenAdapter top;
     private boolean mIsTablet=false;
+    private boolean isRefresh=false;
 
 
 
@@ -52,6 +56,7 @@ public class Top10TracksFragment extends Fragment {
             mParcel = new ArtistParcel(trackNames, albumNames, images);
         }else{
             mParcel=savedInstanceState.getParcelable("topTracks");
+            isRefresh=true;
         }
         Bundle arguments = getArguments();
         if (getActivity().getIntent().getExtras()!=null) {
@@ -82,7 +87,9 @@ public class Top10TracksFragment extends Fragment {
         ListView listView = (ListView) rootView.findViewById(R.id.toptracks);
         TopTenTask topTenTask = new TopTenTask();
         if (mId != null) {
-            topTenTask.execute(mId);
+            if (!isRefresh) {
+                topTenTask.execute(mId);
+            }
             top = new TopTenAdapter(getActivity(), mParcel);
             listView.setAdapter(top);
         }
@@ -127,11 +134,15 @@ public class Top10TracksFragment extends Fragment {
             //setting option for API Query
             Map<String, Object> setting = new HashMap<>();
             setting.put("country", "US");
+            boolean areResults=false;
+            Tracks results= null;
+            if(isNetworkAvailable()) {
+                SpotifyApi api = new SpotifyApi();
+                SpotifyService spotify = api.getService();
+                results = spotify.getArtistTopTrack(search[0], setting);
+                areResults= results.tracks.size() != 0;
+            }
 
-            SpotifyApi api = new SpotifyApi();
-            SpotifyService spotify = api.getService();
-            Tracks results = spotify.getArtistTopTrack(search[0], setting);
-            Boolean areResults= results.tracks.size() != 0;
             if (areResults) {
                 for (Track track : results.tracks) {
 
@@ -162,8 +173,15 @@ public class Top10TracksFragment extends Fragment {
             if (result){
                 top.notifyDataSetChanged();
             }else{
-                Toast.makeText(getActivity(), "Unfortunitely we have no tracks for \"" + mArtist + "\"", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), getString(R.string.no_tracks_toast) + mArtist, Toast.LENGTH_SHORT).show();
             }
+        }
+
+        private boolean isNetworkAvailable() {
+            ConnectivityManager connectivityManager
+                    = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+            return activeNetworkInfo != null && activeNetworkInfo.isConnected();
         }
 
 

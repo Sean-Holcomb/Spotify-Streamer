@@ -1,5 +1,6 @@
 package com.example.seanholcomb.spotifystreamer;
 
+import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -85,24 +86,24 @@ public class NowPlayingActivityFragment extends DialogFragment {
         super.onSaveInstanceState(outState);
     }
 
-    @Override
-    public void onDestroy(){
-        mediaPlayer.stop();
-        mediaPlayer.reset();
 
-        super.onDestroy();
-
-
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_now_playing, container, false);
-        if (mediaPlayer ==null) {
+
+        AudioManager audioManager = (AudioManager)getActivity().getSystemService(Context.AUDIO_SERVICE);
+        SpotifyApplication spotifyApplication=(SpotifyApplication) getActivity().getApplicationContext();
+        if (spotifyApplication.getMediaPlayer()==null) {
             mediaPlayer = new MediaPlayer();
             mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+
+            spotifyApplication.setMediaPlayer(mediaPlayer);
+        }else{
+            mediaPlayer=spotifyApplication.getMediaPlayer();
         }
+
 
 
         artist_textView=(TextView)rootView.findViewById(R.id.artist);
@@ -117,7 +118,23 @@ public class NowPlayingActivityFragment extends DialogFragment {
         playButton = (ImageButton)rootView.findViewById(R.id.play_button);
         playButton.setClickable(false);
         bindView(mPosition);
-        playMusic(mTracks.get(mPosition));
+
+        if (!audioManager.isMusicActive()){
+            playMusic(mTracks.get(mPosition));
+            mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(MediaPlayer player) {
+                    playButton.setClickable(true);
+                    player.start();
+                    playButton.setImageResource(R.drawable.ic_media_pause);
+                }
+            });
+        }else{
+            playButton.setImageResource(R.drawable.ic_media_pause);
+        }
+
+
+
 
 
         OnSeekBarChangeListener listener = new OnSeekBarChangeListener(){
@@ -178,14 +195,7 @@ public class NowPlayingActivityFragment extends DialogFragment {
             }
         });
 
-        mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener(){
-            @Override
-            public void onPrepared(MediaPlayer player){
-                playButton.setClickable(true);
-                player.start();
-                playButton.setImageResource(R.drawable.ic_media_pause);
-            }
-        });
+
 
         return rootView;
     }
@@ -194,7 +204,8 @@ public class NowPlayingActivityFragment extends DialogFragment {
         artist_textView.setText(mArtist);
         album_textView.setText(albumNames.get(position));
         track_textView.setText(trackNames.get(position));
-        Picasso.with(getActivity()).load(images.get(position)).resize(1500, 1500).centerCrop().into(albumArt_imageView);
+        Picasso.with(getActivity()).load(images.get(position)).resize(1200, 1200).centerCrop().into(albumArt_imageView);
+        syncSeekBar();
     }
 
     public void playMusic(String url) {
@@ -206,9 +217,10 @@ public class NowPlayingActivityFragment extends DialogFragment {
             mediaPlayer.setDataSource(url);
             mediaPlayer.prepareAsync();
             mediaPlayer.start();
-            syncSeekBar();
         }catch(IOException except){
             Toast.makeText(getActivity(), "Connection Problem", Toast.LENGTH_SHORT).show();
+        }catch(IllegalArgumentException except){
+            Toast.makeText(getActivity(), "No Audio Data", Toast.LENGTH_SHORT).show();
         }
     }
 
