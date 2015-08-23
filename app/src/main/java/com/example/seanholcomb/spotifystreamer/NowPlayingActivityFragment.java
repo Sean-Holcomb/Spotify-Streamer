@@ -49,6 +49,7 @@ public class NowPlayingActivityFragment extends DialogFragment {
     private List<String> mTracks;
     private Handler handler = new Handler();
     private Boolean touchLock = false;
+    private int picSize=1200;
 
 
 
@@ -78,6 +79,9 @@ public class NowPlayingActivityFragment extends DialogFragment {
         trackNames = mParcel.getArtists();
         albumNames = mParcel.getIds();
         images = mParcel.getImages();
+        if(spotifyApplication.getIsTablet()){
+            picSize=500;
+        }
 
     }
 
@@ -94,7 +98,7 @@ public class NowPlayingActivityFragment extends DialogFragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_now_playing, container, false);
 
-        //AudioManager audioManager = (AudioManager)getActivity().getSystemService(Context.AUDIO_SERVICE);
+
         if (spotifyApplication.getMediaPlayer()==null) {
             mediaPlayer = new MediaPlayer();
             mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
@@ -204,7 +208,7 @@ public class NowPlayingActivityFragment extends DialogFragment {
         artist_textView.setText(mArtist);
         album_textView.setText(albumNames.get(position));
         track_textView.setText(trackNames.get(position));
-        Picasso.with(getActivity()).load(images.get(position)).resize(1200, 1200).centerCrop().into(albumArt_imageView);
+        Picasso.with(getActivity()).load(images.get(position)).resize(picSize, picSize).centerCrop().into(albumArt_imageView);
         syncSeekBar();
     }
 
