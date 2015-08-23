@@ -18,6 +18,7 @@ public class SpotifyApplication extends Application {
     private List<String> musicUrls;
     private boolean mIsTablet = false;
     private MediaPlayer mediaPlayer=null;
+    private String nowPlaying = "";
 
     public SpotifyApplication getInstance(){
         return singleton;
@@ -77,6 +78,16 @@ public class SpotifyApplication extends Application {
     public MediaPlayer getMediaPlayer(){
         return mediaPlayer;
     }
+
+    public void setNowPlaying(String s){
+        nowPlaying=s;
+    }
+
+    public String getNowPlaying(){
+        return nowPlaying;
+    }
+
+
 
 
 }

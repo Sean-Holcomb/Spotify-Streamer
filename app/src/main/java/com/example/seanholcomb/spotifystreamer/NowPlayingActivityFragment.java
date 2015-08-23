@@ -1,6 +1,5 @@
 package com.example.seanholcomb.spotifystreamer;
 
-import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -43,6 +42,7 @@ public class NowPlayingActivityFragment extends DialogFragment {
     private TextView amountPlayed;
     private TextView amountLeft;
     ImageButton playButton;
+    private SpotifyApplication spotifyApplication;
 
     private int mPosition=0;
     private MediaPlayer mediaPlayer;
@@ -60,10 +60,11 @@ public class NowPlayingActivityFragment extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
+        spotifyApplication=(SpotifyApplication) getActivity().getApplicationContext();
         if (savedInstanceState == null || !savedInstanceState.containsKey("NowPlaying")){
 
 
-            SpotifyApplication spotifyApplication=(SpotifyApplication) getActivity().getApplicationContext();
+
             mParcel = spotifyApplication.getArtistParcel();
             mPosition = spotifyApplication.getPosition();
 
@@ -93,8 +94,7 @@ public class NowPlayingActivityFragment extends DialogFragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_now_playing, container, false);
 
-        AudioManager audioManager = (AudioManager)getActivity().getSystemService(Context.AUDIO_SERVICE);
-        SpotifyApplication spotifyApplication=(SpotifyApplication) getActivity().getApplicationContext();
+        //AudioManager audioManager = (AudioManager)getActivity().getSystemService(Context.AUDIO_SERVICE);
         if (spotifyApplication.getMediaPlayer()==null) {
             mediaPlayer = new MediaPlayer();
             mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
@@ -119,7 +119,7 @@ public class NowPlayingActivityFragment extends DialogFragment {
         playButton.setClickable(false);
         bindView(mPosition);
 
-        if (!audioManager.isMusicActive()){
+        if (!mediaPlayer.isPlaying() || !trackNames.get(mPosition).equals(spotifyApplication.getNowPlaying())){
             playMusic(mTracks.get(mPosition));
             mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                 @Override
@@ -209,14 +209,16 @@ public class NowPlayingActivityFragment extends DialogFragment {
     }
 
     public void playMusic(String url) {
-
+        spotifyApplication.setNowPlaying(trackNames.get(mPosition));
         if (mediaPlayer.isPlaying()){
             mediaPlayer.stop();
+            mediaPlayer.reset();
         }
         try {
             mediaPlayer.setDataSource(url);
             mediaPlayer.prepareAsync();
             mediaPlayer.start();
+
         }catch(IOException except){
             Toast.makeText(getActivity(), "Connection Problem", Toast.LENGTH_SHORT).show();
         }catch(IllegalArgumentException except){
