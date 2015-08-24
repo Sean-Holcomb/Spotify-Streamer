@@ -91,6 +91,14 @@ public class NowPlayingActivityFragment extends DialogFragment {
         super.onSaveInstanceState(outState);
     }
 
+    @Override
+    public void onResume(){
+        super.onResume();
+        if(!spotifyApplication.getIsTablet()){
+            getActivity().setTitle(R.string.title_activity_now_playing);
+        }
+    }
+
 
 
     @Override

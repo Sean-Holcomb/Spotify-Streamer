@@ -77,12 +77,21 @@ public class Top10TracksFragment extends Fragment {
         super.onSaveInstanceState(outState);
     }
 
+    @Override
+    public void onResume(){
+        super.onResume();
+        if(!mIsTablet){
+            getActivity().setTitle(mArtist);
+        }
+    }
+
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_top10_tracks, container, false);
+
         FragmentManager fm = getActivity().getSupportFragmentManager();
         ListView listView = (ListView) rootView.findViewById(R.id.toptracks);
         TopTenTask topTenTask = new TopTenTask();
